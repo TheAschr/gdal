@@ -933,6 +933,19 @@ func (fd FieldDefinition) SetName(name string) {
 	C.OGR_Fld_SetName(fd.cval, cName)
 }
 
+// Fetch the alternative name (or "alias") of the field
+func (fd FieldDefinition) AlternativeName() string {
+	name := C.OGR_Fld_GetAlternativeNameRef(fd.cval)
+	return C.GoString(name)
+}
+
+// Reset the alternative name (or "alias") for this field.
+func (fd FieldDefinition) SetAlternateName(name string) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	C.OGR_Fld_SetAlternativeName(fd.cval, cName)
+}
+
 // Fetch the type of this field
 func (fd FieldDefinition) Type() FieldType {
 	fType := C.OGR_Fld_GetType(fd.cval)
