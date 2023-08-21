@@ -995,17 +995,6 @@ func (fd FieldDefinition) SetPrecision(precision int) {
 	C.OGR_Fld_SetPrecision(fd.cval, C.int(precision))
 }
 
-// Fetch the length for this field
-func (fd FieldDefinition) Length() int {
-	length := C.OGR_Fld_GetLength(fd.cval)
-	return int(length)
-}
-
-// Set the length for this field
-func (fd FieldDefinition) SetLength(length int) {
-	C.OGR_Fld_SetLength(fd.cval, C.int(length))
-}
-
 // Set defining parameters of field in a single call
 func (fd FieldDefinition) Set(
 	name string,
