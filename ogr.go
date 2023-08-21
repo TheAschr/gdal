@@ -946,6 +946,11 @@ func (fd FieldDefinition) SetAlternateName(name string) {
 	C.OGR_Fld_SetAlternativeName(fd.cval, cName)
 }
 
+// Set the type of this field
+func (fd FieldDefinition) SetNullable(nullable bool) {
+	C.OGR_Fld_SetNullable(fd.cval, BoolToCInt(nullable))
+}
+
 // Fetch the type of this field
 func (fd FieldDefinition) Type() FieldType {
 	fType := C.OGR_Fld_GetType(fd.cval)
@@ -988,6 +993,17 @@ func (fd FieldDefinition) Precision() int {
 // Set the precision for this field
 func (fd FieldDefinition) SetPrecision(precision int) {
 	C.OGR_Fld_SetPrecision(fd.cval, C.int(precision))
+}
+
+// Fetch the length for this field
+func (fd FieldDefinition) Length() int {
+	length := C.OGR_Fld_GetLength(fd.cval)
+	return int(length)
+}
+
+// Set the length for this field
+func (fd FieldDefinition) SetLength(length int) {
+	C.OGR_Fld_SetLength(fd.cval, C.int(length))
 }
 
 // Set defining parameters of field in a single call
