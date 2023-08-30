@@ -869,6 +869,33 @@ func (geom Geometry) BuildPolygonFromEdges(autoClose bool, tolerance float64) (G
 	return Geometry{newGeom}, cErr.Err()
 }
 
+// Returns if this geometry is or has curve geometry
+func (geom Geometry) HasCurveGeometry(bLookForNonLinear bool) bool {
+	hasCurve := C.OGR_G_HasCurveGeometry(
+		geom.cval,
+		BoolToCInt(bLookForNonLinear),
+	)
+	return hasCurve == 1
+}
+
+// Return, possibly approximate, non-curve version of this geometry
+func (geom Geometry) GetLinearGeometry(dfMaxAngleStepSizeDegrees float64, options []string) Geometry {
+	length := len(options)
+	opts := make([]*C.char, length+1)
+	for i := 0; i < length; i++ {
+		opts[i] = C.CString(options[i])
+		defer C.free(unsafe.Pointer(opts[i]))
+	}
+	opts[length] = (*C.char)(unsafe.Pointer(nil))
+
+	newGeom := C.OGR_G_GetLinearGeometry(
+		geom.cval,
+		C.double(dfMaxAngleStepSizeDegrees),
+		(**C.char)(unsafe.Pointer(&opts[0])),
+	)
+	return Geometry{newGeom}
+}
+
 /* -------------------------------------------------------------------- */
 /*      Field definition functions                                      */
 /* -------------------------------------------------------------------- */
