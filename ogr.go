@@ -973,7 +973,13 @@ func (fd FieldDefinition) SetAlternateName(name string) {
 	C.OGR_Fld_SetAlternativeName(fd.cval, cName)
 }
 
-// Set the type of this field
+// Fetch the nullability of this field
+func (fd FieldDefinition) IsNullable() bool {
+	isNullable := C.OGR_Fld_IsNullable(fd.cval)
+	return isNullable != 0
+}
+
+// Set the nullability of this field
 func (fd FieldDefinition) SetNullable(nullable bool) {
 	C.OGR_Fld_SetNullable(fd.cval, BoolToCInt(nullable))
 }
