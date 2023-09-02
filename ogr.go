@@ -992,7 +992,7 @@ func (fd FieldDefinition) IsUnique() bool {
 
 // Set whether this field has a unique constraint.
 func (fd FieldDefinition) SetUnique(unique bool) {
-	C.OGR_Fld_SetUnique(fd.cval, BoolToCInt(nullable))
+	C.OGR_Fld_SetUnique(fd.cval, BoolToCInt(unique))
 }
 
 // Get default field value.
