@@ -984,6 +984,56 @@ func (fd FieldDefinition) SetNullable(nullable bool) {
 	C.OGR_Fld_SetNullable(fd.cval, BoolToCInt(nullable))
 }
 
+// Return whether this field has a unique constraint.
+func (fd FieldDefinition) IsUnique() bool {
+	isUnique := C.OGR_Fld_IsUnique(fd.cval)
+	return isUnique != 0
+}
+
+// Set whether this field has a unique constraint.
+func (fd FieldDefinition) SetUnique(unique bool) {
+	C.OGR_Fld_SetUnique(fd.cval, BoolToCInt(nullable))
+}
+
+// Get default field value.
+func (fd FieldDefinition) GetDefault() string {
+	defaultVal := C.OGR_Fld_GetDefault(fd.cval)
+	return C.GoString(defaultVal)
+}
+
+// Set default field value.
+func (fd FieldDefinition) SetDefault(defaultVal string) {
+	cDefaultVal := C.CString(defaultVal)
+	defer C.free(unsafe.Pointer(cDefaultVal))
+	C.OGR_Fld_SetDefault(fd.cval, cDefaultVal)
+}
+
+// Return the name of the field domain for this field.
+func (fd FieldDefinition) GetDomainName() string {
+	domainName := C.OGR_Fld_GetDomainName(fd.cval)
+	return C.GoString(domainName)
+}
+
+// Set the name of the field domain for this field.
+func (fd FieldDefinition) SetDomainName(domainName string) {
+	cDomainName := C.CString(domainName)
+	defer C.free(unsafe.Pointer(cDomainName))
+	C.OGR_Fld_SetDomainName(fd.cval, cDomainName)
+}
+
+// Return the (optional) comment for this field.
+func (fd FieldDefinition) GetComment() string {
+	comment := C.OGR_Fld_GetComment(fd.cval)
+	return C.GoString(comment)
+}
+
+// Set the comment for this field.
+func (fd FieldDefinition) SetComment(comment string) {
+	cComment := C.CString(comment)
+	defer C.free(unsafe.Pointer(cComment))
+	C.OGR_Fld_SetComment(fd.cval, cComment)
+}
+
 // Fetch the type of this field
 func (fd FieldDefinition) Type() FieldType {
 	fType := C.OGR_Fld_GetType(fd.cval)
