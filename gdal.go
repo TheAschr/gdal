@@ -143,7 +143,7 @@ var (
 type CPLErr int
 
 func (err CPLErr) Err() string {
-	switch err {
+	switch int(err) {
 	case CPLE_None:
 		return "No Error"
 	case CPLE_AppDefined:
