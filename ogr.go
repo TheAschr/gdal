@@ -1697,9 +1697,12 @@ func (layer Layer) Definition() FeatureDefinition {
 }
 
 // Fetch the spatial reference system for this layer
-func (layer Layer) SpatialReference() SpatialReference {
+func (layer Layer) SpatialReference() *SpatialReference {
 	sr := C.OGR_L_GetSpatialRef(layer.cval)
-	return SpatialReference{sr}
+	if sr == nil {
+		return nil
+	}
+	return &SpatialReference{sr}
 }
 
 // Fetch the feature count for this layer
