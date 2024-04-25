@@ -142,44 +142,44 @@ var (
 
 type CPLErr int
 
-func (err CPLErr) Err() string {
+func (err CPLErr) Err() error {
 	switch int(err) {
 	case CPLE_None:
-		return "No Error"
+		return errors.New("No Error")
 	case CPLE_AppDefined:
-		return "Application Defined Error"
+		return errors.New("Application Defined Error")
 	case CPLE_OutOfMemory:
-		return "Out of Memory Error"
+		return errors.New("Out of Memory Error")
 	case CPLE_FileIO:
-		return "File IO Error"
+		return errors.New("File IO Error")
 	case CPLE_OpenFailed:
-		return "Open Failed Error"
+		return errors.New("Open Failed Error")
 	case CPLE_IllegalArg:
-		return "Illegal Argument Error"
+		return errors.New("Illegal Argument Error")
 	case CPLE_NotSupported:
-		return "Not Supported Error"
+		return errors.New("Not Supported Error")
 	case CPLE_AssertionFailed:
-		return "Assertion Failed Error"
+		return errors.New("Assertion Failed Error")
 	case CPLE_NoWriteAccess:
-		return "No Write Access Error"
+		return errors.New("No Write Access Error")
 	case CPLE_UserInterrupt:
-		return "User Interrupt Error"
+		return errors.New("User Interrupt Error")
 	case CPLE_ObjectNull:
-		return "Object Null Error"
+		return errors.New("Object Null Error")
 	case CPLE_HttpResponse:
-		return "HTTP Response Error"
+		return errors.New("HTTP Response Error")
 	case CPLE_AWSBucketNotFound:
-		return "AWS Bucket Not Found Error"
+		return errors.New("AWS Bucket Not Found Error")
 	case CPLE_AWSObjectNotFound:
-		return "AWS Object Not Found Error"
+		return errors.New("AWS Object Not Found Error")
 	case CPLE_AWSAccessDenied:
-		return "AWS Access Denied Error"
+		return errors.New("AWS Access Denied Error")
 	case CPLE_AWSInvalidCredentials:
-		return "AWS Invalid Credentials Error"
+		return errors.New("AWS Invalid Credentials Error")
 	case CPLE_AWSSignatureDoesNotMatch:
-		return "AWS Signature Does Not Match Error"
+		return errors.New("AWS Signature Does Not Match Error")
 	}
-	return "Unknown Error"
+	return errors.New("Unknown Error")
 }
 
 type CPLErrContainer struct {
