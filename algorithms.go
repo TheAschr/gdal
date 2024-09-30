@@ -497,7 +497,6 @@ func GridCreate(
 			return nil, errInvalidOptionsTypeWasPassed
 		}
 		poptions = unsafe.Pointer(&C.GDALGridInverseDistanceToAPowerOptions{
-			nSizeOfStructure:  C.size_t(unsafe.Sizeof(soptions)),
 			dfPower:           C.double(soptions.Power),
 			dfSmoothing:       C.double(soptions.Smoothing),
 			dfAnisotropyRatio: C.double(soptions.AnisotropyRatio),
@@ -515,7 +514,6 @@ func GridCreate(
 			return nil, errInvalidOptionsTypeWasPassed
 		}
 		poptions = unsafe.Pointer(&C.GDALGridInverseDistanceToAPowerNearestNeighborOptions{
-			nSizeOfStructure: C.size_t(unsafe.Sizeof(soptions)),
 			dfPower:          C.double(soptions.Power),
 			dfRadius:         C.double(soptions.Radius),
 			dfSmoothing:      C.double(soptions.Smoothing),
@@ -529,7 +527,6 @@ func GridCreate(
 			return nil, errInvalidOptionsTypeWasPassed
 		}
 		poptions = unsafe.Pointer(&C.GDALGridMovingAverageOptions{
-			nSizeOfStructure: C.size_t(unsafe.Sizeof(soptions)),
 			dfRadius1:        C.double(soptions.Radius1),
 			dfRadius2:        C.double(soptions.Radius2),
 			dfAngle:          C.double(soptions.Angle),
@@ -542,7 +539,6 @@ func GridCreate(
 			return nil, errInvalidOptionsTypeWasPassed
 		}
 		poptions = unsafe.Pointer(&C.GDALGridNearestNeighborOptions{
-			nSizeOfStructure: C.size_t(unsafe.Sizeof(soptions)),
 			dfRadius1:        C.double(soptions.Radius1),
 			dfRadius2:        C.double(soptions.Radius2),
 			dfAngle:          C.double(soptions.Angle),
@@ -555,7 +551,6 @@ func GridCreate(
 			return nil, errInvalidOptionsTypeWasPassed
 		}
 		poptions = unsafe.Pointer(&C.GDALGridDataMetricsOptions{
-			nSizeOfStructure: C.size_t(unsafe.Sizeof(soptions)),
 			dfRadius1:        C.double(soptions.Radius1),
 			dfRadius2:        C.double(soptions.Radius2),
 			dfAngle:          C.double(soptions.Angle),
@@ -568,7 +563,6 @@ func GridCreate(
 			return nil, errInvalidOptionsTypeWasPassed
 		}
 		poptions = unsafe.Pointer(&C.GDALGridLinearOptions{
-			nSizeOfStructure: C.size_t(unsafe.Sizeof(soptions)),
 			dfRadius:         C.double(soptions.Radius),
 			dfNoDataValue:    C.double(soptions.NoDataValue),
 		})
