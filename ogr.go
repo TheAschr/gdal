@@ -1032,19 +1032,6 @@ func (fd FieldDefinition) SetDomainName(domainName string) {
 	C.OGR_Fld_SetDomainName(fd.cval, cDomainName)
 }
 
-// Return the (optional) comment for this field.
-func (fd FieldDefinition) GetComment() string {
-	comment := C.OGR_Fld_GetComment(fd.cval)
-	return C.GoString(comment)
-}
-
-// Set the comment for this field.
-func (fd FieldDefinition) SetComment(comment string) {
-	cComment := C.CString(comment)
-	defer C.free(unsafe.Pointer(cComment))
-	C.OGR_Fld_SetComment(fd.cval, cComment)
-}
-
 // Fetch the type of this field
 func (fd FieldDefinition) Type() FieldType {
 	fType := C.OGR_Fld_GetType(fd.cval)
