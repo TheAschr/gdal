@@ -142,6 +142,46 @@ var (
 
 type CPLErr int
 
+func (err CPLErr) Err() error {
+	switch int(err) {
+	case CPLE_None:
+		return errors.New("No Error")
+	case CPLE_AppDefined:
+		return errors.New("Application Defined Error")
+	case CPLE_OutOfMemory:
+		return errors.New("Out of Memory Error")
+	case CPLE_FileIO:
+		return errors.New("File IO Error")
+	case CPLE_OpenFailed:
+		return errors.New("Open Failed Error")
+	case CPLE_IllegalArg:
+		return errors.New("Illegal Argument Error")
+	case CPLE_NotSupported:
+		return errors.New("Not Supported Error")
+	case CPLE_AssertionFailed:
+		return errors.New("Assertion Failed Error")
+	case CPLE_NoWriteAccess:
+		return errors.New("No Write Access Error")
+	case CPLE_UserInterrupt:
+		return errors.New("User Interrupt Error")
+	case CPLE_ObjectNull:
+		return errors.New("Object Null Error")
+	case CPLE_HttpResponse:
+		return errors.New("HTTP Response Error")
+	case CPLE_AWSBucketNotFound:
+		return errors.New("AWS Bucket Not Found Error")
+	case CPLE_AWSObjectNotFound:
+		return errors.New("AWS Object Not Found Error")
+	case CPLE_AWSAccessDenied:
+		return errors.New("AWS Access Denied Error")
+	case CPLE_AWSInvalidCredentials:
+		return errors.New("AWS Invalid Credentials Error")
+	case CPLE_AWSSignatureDoesNotMatch:
+		return errors.New("AWS Signature Does Not Match Error")
+	}
+	return errors.New("Unknown Error")
+}
+
 type CPLErrContainer struct {
 	ErrVal C.CPLErr
 }

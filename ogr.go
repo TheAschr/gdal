@@ -880,6 +880,33 @@ func (geom Geometry) BuildPolygonFromEdges(autoClose bool, tolerance float64) (G
 	return Geometry{newGeom}, OGRErrContainer{ErrVal: cErr}.Err()
 }
 
+// Returns if this geometry is or has curve geometry
+func (geom Geometry) HasCurveGeometry(bLookForNonLinear bool) bool {
+	hasCurve := C.OGR_G_HasCurveGeometry(
+		geom.cval,
+		BoolToCInt(bLookForNonLinear),
+	)
+	return hasCurve == 1
+}
+
+// Return, possibly approximate, non-curve version of this geometry
+func (geom Geometry) GetLinearGeometry(dfMaxAngleStepSizeDegrees float64, options []string) Geometry {
+	length := len(options)
+	opts := make([]*C.char, length+1)
+	for i := 0; i < length; i++ {
+		opts[i] = C.CString(options[i])
+		defer C.free(unsafe.Pointer(opts[i]))
+	}
+	opts[length] = (*C.char)(unsafe.Pointer(nil))
+
+	newGeom := C.OGR_G_GetLinearGeometry(
+		geom.cval,
+		C.double(dfMaxAngleStepSizeDegrees),
+		(**C.char)(unsafe.Pointer(&opts[0])),
+	)
+	return Geometry{newGeom}
+}
+
 /* -------------------------------------------------------------------- */
 /*      Field definition functions                                      */
 /* -------------------------------------------------------------------- */
@@ -955,6 +982,67 @@ func (fd FieldDefinition) SetAlternateName(name string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 	C.OGR_Fld_SetAlternativeName(fd.cval, cName)
+}
+
+// Fetch the nullability of this field
+func (fd FieldDefinition) IsNullable() bool {
+	isNullable := C.OGR_Fld_IsNullable(fd.cval)
+	return isNullable != 0
+}
+
+// Set the nullability of this field
+func (fd FieldDefinition) SetNullable(nullable bool) {
+	C.OGR_Fld_SetNullable(fd.cval, BoolToCInt(nullable))
+}
+
+// Return whether this field has a unique constraint.
+func (fd FieldDefinition) IsUnique() bool {
+	isUnique := C.OGR_Fld_IsUnique(fd.cval)
+	return isUnique != 0
+}
+
+// Set whether this field has a unique constraint.
+func (fd FieldDefinition) SetUnique(unique bool) {
+	C.OGR_Fld_SetUnique(fd.cval, BoolToCInt(unique))
+}
+
+// Get default field value.
+func (fd FieldDefinition) GetDefault() string {
+	defaultVal := C.OGR_Fld_GetDefault(fd.cval)
+	return C.GoString(defaultVal)
+}
+
+// Set default field value.
+func (fd FieldDefinition) SetDefault(defaultVal string) {
+	cDefaultVal := C.CString(defaultVal)
+	defer C.free(unsafe.Pointer(cDefaultVal))
+	C.OGR_Fld_SetDefault(fd.cval, cDefaultVal)
+}
+
+// Return the name of the field domain for this field.
+func (fd FieldDefinition) GetDomainName() string {
+	domainName := C.OGR_Fld_GetDomainName(fd.cval)
+	return C.GoString(domainName)
+}
+
+// Set the name of the field domain for this field.
+func (fd FieldDefinition) SetDomainName(domainName string) {
+	cDomainName := C.CString(domainName)
+	defer C.free(unsafe.Pointer(cDomainName))
+	C.OGR_Fld_SetDomainName(fd.cval, cDomainName)
+}
+
+// Return the (optional) comment for this field.
+func (fd FieldDefinition) GetComment() string {
+	comment := C.OGR_Fld_GetComment(fd.cval)
+	return C.GoString(comment)
+}
+
+// Set the comment for this field.
+func (fd FieldDefinition) SetComment(comment string) {
+	cComment := C.CString(comment)
+	defer C.free(unsafe.Pointer(cComment))
+	C.OGR_Fld_SetComment(fd.cval, cComment)
 }
 
 // Fetch the type of this field
@@ -1609,9 +1697,12 @@ func (layer Layer) Definition() FeatureDefinition {
 }
 
 // Fetch the spatial reference system for this layer
-func (layer Layer) SpatialReference() SpatialReference {
+func (layer Layer) SpatialReference() *SpatialReference {
 	sr := C.OGR_L_GetSpatialRef(layer.cval)
-	return SpatialReference{sr}
+	if sr == nil {
+		return nil
+	}
+	return &SpatialReference{sr}
 }
 
 // Fetch the feature count for this layer
