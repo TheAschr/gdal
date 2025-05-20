@@ -68,7 +68,7 @@ func (sr SpatialReference) ToPrettyWKT(simplify bool) (string, error) {
 }
 
 func (sr SpatialReference) GetEPSGGeogCS() int {
-	code := C.OSRGetEPSGGeogCS(sr.cval)
+	code := C.OSREPSGGeogCS(sr.cval)
 	return int(code)
 }
 
